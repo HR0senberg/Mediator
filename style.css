@@ -1,0 +1,1111 @@
+/* Базовые стили для приложения "Медиатор" с улучшенным дизайном */
+
+:root {
+  /* Пастельная цветовая палитра на основе трендов 2025 года */
+  --color-bg: #F7F6F3;           /* кремово‑бежевый фон */
+  --color-primary: #7EA9E1;       /* эфемерный голубой для основных элементов */
+  --color-secondary: #F6C358;     /* тёплый жёлтый для акцентов */
+  --color-accent: #E3A7C0;        /* мягкий розовый для дополнительных акцентов */
+  --color-text: #333333;          /* базовый цвет текста */
+  --header-height: 56px;
+  --nav-height: 56px;
+
+/* Лёгкий анимированный градиентный фон (не отвлекает и работает и в светлой, и в тёмной теме) */
+--grad1: 126 169 225;      /* rgb для --color-primary */
+--grad2: 227 167 192;      /* rgb для --color-accent */
+--grad3: 246 195 88;       /* rgb для --color-secondary */
+--grad-alpha1: 0.22;
+--grad-alpha2: 0.18;
+--grad-alpha3: 0.16;
+--grad-blur: 18px;
+  --grad1a: rgba(126, 169, 225, 0.22);
+  --grad2a: rgba(227, 167, 192, 0.18);
+  --grad3a: rgba(246, 195, 88, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  padding-bottom: var(--nav-height);
+}
+
+/* Лёгкий анимированный градиентный фон */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -18%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 20%, var(--grad1a) 0%, transparent 58%),
+    radial-gradient(circle at 80% 30%, var(--grad2a) 0%, transparent 60%),
+    radial-gradient(circle at 40% 85%, var(--grad3a) 0%, transparent 62%);
+  filter: blur(var(--grad-blur));
+  transform: translate3d(0, 0, 0) scale(1);
+  will-change: transform;
+  animation: gradientFloat 18s ease-in-out infinite alternate;
+}
+
+@keyframes gradientFloat {
+  0%   { transform: translate3d(-1.5%, -1.2%, 0) scale(1.02); }
+  50%  { transform: translate3d(1.2%, -0.8%, 0) scale(1.06); }
+  100% { transform: translate3d(0.8%, 1.4%, 0) scale(1.03); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+  .relax-bg { animation: none; }
+}
+
+
+header {
+  padding: 0.75rem 1rem;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #1b2430;
+  background: rgba(255, 255, 255, 0.72);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  /* Чуть сильнее «стекло», чтобы эффект был виден */
+  backdrop-filter: blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 110;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+}
+
+.header-sub {
+  font-size: 0.9rem;
+  color: rgba(27, 36, 48, 0.7);
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .header-sub { display: none; }
+}
+
+main,
+section {
+  flex: 1;
+  width: 100%;
+  padding: 1rem;
+}
+
+/* На десктопе даём больше «поля» и убираем ощущение пустоты по краям */
+@media (min-width: 900px) {
+  main,
+  section {
+    padding: 1.25rem 1.75rem;
+  }
+}
+
+.page-panel {
+  width: 100%;
+}
+
+.history-grid,
+.diary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  /* Диаграммы в «Истории» удалены — история остаётся в одну колонку, дневник можно оставить в две. */
+  .diary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Контейнеры страниц */
+main > *,
+section > * {
+  /* Убираем ограничение ширины на десктопе – содержимое заполняет доступное пространство. */
+  max-width: none;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Панели */
+.panel {
+  /* Более прозрачное «стекло», чтобы был заметен blur от фонового градиента */
+  background: rgba(255, 255, 255, 0.58);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.40);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(14px);
+  padding: 1rem;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .home-grid {
+    /* Больше пространства под камеру — основной блок занимает большую часть экрана */
+    grid-template-columns: 3fr 1.25fr;
+    gap: 1.5rem;
+  }
+}
+
+/* Контейнер с видео */
+#video-container {
+  position: relative;
+  width: 100%;
+  background: #000;
+  border-radius: 14px;
+  overflow: hidden;
+  /* Делаем «окно камеры» стабильным по высоте и визуально главным */
+  aspect-ratio: 16 / 10;
+}
+
+@media (min-width: 900px) {
+  #video-container {
+    /* Камера должна быть видна без скролла и занимать максимум доступной высоты */
+    max-height: calc(100vh - var(--header-height) - var(--nav-height) - 3.5rem);
+  }
+}
+
+#video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video-hint {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  color: rgba(51, 51, 51, 0.75);
+}
+
+/* Подсказки качества кадра: делаем их заметными, но спокойными */
+.video-hint.warn {
+  padding: 0.6rem 0.75rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 183, 3, 0.35);
+  color: rgba(27, 36, 48, 0.92);
+  backdrop-filter: blur(14px);
+}
+
+.video-hint.ok {
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+
+@media (min-width: 900px) {
+  /* Чуть больше «воздуха» по краям на десктопе, но без ощущения пустоты */
+  main,
+  section {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  /* Камера должна занимать заметную часть видимой области */
+  .panel-video {
+    padding: 1rem;
+  }
+
+  #video-container {
+    max-height: calc(100vh - var(--header-height) - var(--nav-height) - 3.25rem);
+  }
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(126, 169, 225, 0.18);
+  border: 1px solid rgba(126, 169, 225, 0.35);
+  color: rgba(27, 36, 48, 0.85);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.6px;
+}
+
+.status-chip.paused {
+  opacity: 0.75;
+  border-color: rgba(27, 36, 48, 0.18);
+}
+
+.status-title {
+  font-weight: 650;
+  color: rgba(27, 36, 48, 0.88);
+  font-size: 1.02rem;
+}
+.result {
+  margin-top: 0.75rem;
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: rgba(27, 36, 48, 0.9);
+  min-height: 2.2rem;
+  white-space: pre-line;
+}
+
+/* «Герой»-карточка результата — усиливаем иерархию на главном экране */
+#emotion-result {
+  margin-top: 0.85rem;
+  padding: 1.2rem 1.4rem;
+  border-radius: 18px;
+  /* Цвет и окантовка динамически меняются в зависимости от эмоции через CSS-переменные */
+  background: var(--emotion-bg, rgba(255, 255, 255, 0.85));
+  border: 1px solid var(--emotion-border, rgba(0, 0, 0, 0.07));
+  color: var(--emotion-text, var(--color-text-main));
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  line-height: 1.45;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+@media (min-width: 900px) {
+  #emotion-result {
+    font-size: 1.30rem;
+  }
+}
+
+.actions-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+
+  /* Glass container for button blocks (fallback without blur) */
+  padding: 0.85rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.26);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+}
+
+/* Enable blur where supported (glassmorphism) */
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .actions-row {
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+}
+
+@media (min-width: 600px) {
+  .actions-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.recommend-wrap h3 {
+  margin: 1.1rem 0 0.6rem;
+  font-size: 1.05rem;
+}
+
+.practice-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 600px) {
+  .practice-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.practice-card {
+  border-radius: 14px;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.30);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .practice-card {
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+}
+
+.practice-card h4 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.practice-card p {
+  margin: 0 0 0.65rem;
+  color: rgba(51, 51, 51, 0.74);
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.tiny-note {
+  margin-top: 0.55rem;
+  color: rgba(51, 51, 51, 0.68);
+  font-size: 0.9rem;
+}
+
+.tip-card {
+  margin-top: 1rem;
+  padding: 0.9rem;
+  border-radius: 14px;
+  background: rgba(126, 169, 225, 0.10);
+  border: 1px solid rgba(126, 169, 225, 0.22);
+}
+
+.tip-card h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+}
+
+.tip-card p {
+  margin: 0;
+  color: rgba(51, 51, 51, 0.78);
+  line-height: 1.4;
+}
+
+/* Кнопки */
+button {
+  margin-top: 0;
+  padding: 0.72rem 1.05rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.12s ease, background-color 0.2s, opacity 0.2s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button.primary {
+  background: linear-gradient(135deg, rgba(126, 169, 225, 1), rgba(227, 167, 192, 0.95));
+}
+
+button.ghost {
+  background: rgba(255, 255, 255, 0.7);
+  color: rgba(27, 36, 48, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+}
+
+button.danger {
+  background: linear-gradient(135deg, rgba(227, 167, 192, 0.95), rgba(246, 195, 88, 0.92));
+}
+
+button:disabled {
+  background-color: #9E9E9E;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--color-secondary);
+  opacity: 0.95;
+}
+
+/* Практика */
+.practice-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .practice-layout {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1.25rem;
+  }
+}
+
+.practice-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.practice-header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.practice-header p {
+  margin: 0.25rem 0 0;
+  color: rgba(51, 51, 51, 0.75);
+  line-height: 1.4;
+}
+
+.practice-center {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.breath-circle {
+  width: min(320px, 80vw);
+  aspect-ratio: 1 / 1;
+  border-radius: 999px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  transform: scale(var(--scale, 0.92));
+  transition: transform 120ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breath-circle {
+    transition: none;
+  }
+}
+
+.breath-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(126, 169, 225, 0.35), transparent 58%),
+    radial-gradient(circle at 70% 40%, rgba(227, 167, 192, 0.30), transparent 62%),
+    radial-gradient(circle at 45% 80%, rgba(246, 195, 88, 0.22), transparent 64%);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+}
+
+.breath-text {
+  position: relative;
+  text-align: center;
+  padding: 1rem;
+}
+
+.prompt {
+  font-weight: 750;
+  font-size: 1.15rem;
+  color: rgba(27, 36, 48, 0.92);
+}
+
+.timer {
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+  color: rgba(27, 36, 48, 0.65);
+  letter-spacing: 0.6px;
+}
+
+.coach {
+  color: rgba(51, 51, 51, 0.76);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.practice-controls {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 600px) {
+  .practice-controls {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.practice-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.practice-list button {
+  width: 100%;
+}
+
+/* Slight glass only for non-primary option buttons (so we don't override the highlight) */
+.practice-list button:not(.primary):not(.danger) {
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .practice-list button:not(.primary):not(.danger) {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+
+
+/* Этап 6: карточки рекомендаций (практика + почему + мягкие предупреждения) */
+button.rec-card {
+  text-align: left;
+  padding: 0.9rem 0.95rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.30);
+  color: rgba(27, 36, 48, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+  line-height: 1.25;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  button.rec-card {
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+}
+
+button.rec-card:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.62);
+  opacity: 1;
+}
+
+button.rec-card.selected {
+  /* Раньше выделение могло «выгорать» в белое на светлом стекле.
+     Делаем выделение полупрозрачным, чтобы blur был заметен, а текст оставался читаемым. */
+  background: linear-gradient(135deg, rgba(126, 169, 225, 0.40), rgba(227, 167, 192, 0.34)) !important;
+  color: rgba(17, 24, 39, 0.96);
+  border-color: rgba(126, 169, 225, 0.36);
+  box-shadow: 0 12px 26px rgba(126, 169, 225, 0.18);
+}
+
+button.rec-card.selected .rec-sub,
+button.rec-card.selected .rec-why,
+button.rec-card.selected .rec-caution {
+  opacity: 0.9;
+}
+
+.rec-title {
+  font-weight: 700;
+  letter-spacing: 0.15px;
+  margin-bottom: 0.25rem;
+}
+
+.rec-sub {
+  font-size: 0.94rem;
+  opacity: 0.82;
+}
+
+.rec-why {
+  margin-top: 0.55rem;
+  font-size: 0.92rem;
+  opacity: 0.88;
+}
+
+.rec-caution {
+  margin-top: 0.55rem;
+  font-size: 0.88rem;
+  opacity: 0.9;
+}
+
+.rec-caution b {
+  font-weight: 750;
+}
+
+/* =========================
+   Быстрая помощь
+   ========================= */
+.quick-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 700px) {
+  .quick-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.quick-after {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .quick-after {
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+}
+
+.quick-after-title {
+  font-weight: 750;
+  margin-bottom: 0.6rem;
+}
+
+.quick-after-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+
+@media (min-width: 700px) {
+  .quick-after-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* В режиме быстрой помощи прячем боковой список вариантов, чтобы не перегружать */
+body.quick-mode .practice-layout {
+  grid-template-columns: 1fr;
+}
+
+body.quick-mode .practice-side {
+  display: none;
+}
+
+/* --- Explainability UI --- */
+.rec-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.55rem;
+}
+
+.rec-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.5);
+  color: var(--color-text-main);
+  font-size: 0.92rem;
+  line-height: 1.2;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .rec-badge {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.rec-badge .i {
+  font-size: 1.05em;
+}
+
+.how-box {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.52);
+  padding: 0.6rem 0.9rem;
+}
+
+@supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .how-box {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+}
+
+.how-box > summary {
+  cursor: pointer;
+  font-weight: 650;
+  color: var(--color-text-main);
+  list-style: none;
+}
+
+.how-box > summary::-webkit-details-marker {
+  display: none;
+}
+
+.how-body {
+  margin-top: 0.6rem;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 1rem;
+}
+
+.how-item b {
+  color: var(--color-text-main);
+  font-weight: 650;
+}
+
+@media (max-width: 700px) {
+  .how-grid { grid-template-columns: 1fr; }
+}
+
+/* =========================
+   Мини-обратная связь после практики
+   ========================= */
+.feedback-box {
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+}
+
+.feedback-title {
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.feedback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.feedback-actions button {
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+}
+
+/* Отдельный класс для отображения иконки эмоции в карточке результата */
+.emotion-emoji {
+  font-size: 1.6em;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+.warn-box {
+  padding: 0.85rem 0.9rem;
+  border-radius: 14px;
+  background: rgba(246, 195, 88, 0.14);
+  border: 1px solid rgba(246, 195, 88, 0.28);
+  color: rgba(27, 36, 48, 0.88);
+  line-height: 1.35;
+}
+
+.instructions {
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+.instructions ol {
+  margin: 0.6rem 0 0;
+  padding-left: 1.1rem;
+  color: rgba(51, 51, 51, 0.76);
+  line-height: 1.45;
+}
+/* скрытый класс */
+.hidden {
+  display: none !important;
+}
+
+/* Фоновая анимация во время практики */
+.relax-bg {
+  animation: relaxBackground 12s infinite alternate;
+}
+
+@keyframes relaxBackground {
+  0% {
+    background-color: var(--color-bg);
+  }
+  50% {
+    background-color: #dceefc; /* мягкий голубой */
+  }
+  100% {
+    background-color: #fef3e2; /* нежный персиковый */
+  }
+}
+
+#practice-title {
+  margin-bottom: 0.2rem;
+}
+
+#practice-description {
+  max-width: 760px;
+}
+
+/* Списки истории и дневника */
+#historyList,
+#diaryList {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  max-width: none;
+}
+
+#historyList li,
+#diaryList li {
+  border-bottom: 1px solid #eee;
+  padding: 0.6rem 0;
+  font-size: 0.95rem;
+}
+
+/* Диаграммы в разделе истории удалены */
+
+textarea {
+  width: 100%;
+  max-width: none;
+  height: 100px;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Кнопки оценки */
+.ratingBtn {
+  margin: 0.3rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ratingBtn.selected {
+  background-color: var(--color-secondary);
+}
+
+
+/* Короткий тест (после камеры) */
+.test-questions {
+  display: grid;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.q-card {
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  padding: 0.9rem 0.9rem 0.7rem;
+}
+
+.q-title {
+  font-weight: 600;
+  margin-bottom: 0.55rem;
+}
+
+.q-scale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.q-scale .ratingBtn {
+  margin: 0;
+}
+
+.q-hint {
+  margin-top: 0.45rem;
+  font-size: 0.85rem;
+  color: rgba(51, 51, 51, 0.72);
+}
+
+.test-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+}
+
+#testScoreHint {
+  font-weight: 650;
+  color: rgba(27, 36, 48, 0.78);
+}
+/* Нижняя навигация */
+#bottomNav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--nav-height);
+  background-color: var(--color-primary);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+#bottomNav .nav-item {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
+}
+
+#bottomNav .nav-item.active {
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+@media (min-width: 600px) {
+  #video-container {
+    /* Немного расширяем окно камеры на средних экранах */
+    max-width: 800px;
+  }
+  button {
+    font-size: 1.1rem;
+  }
+}
+
+/* Адаптация для десктопов */
+@media (min-width: 900px) {
+  /* На десктопах делаем боковую навигацию, а контент растягиваем по ширине */
+  body {
+    padding-left: 220px;
+    padding-bottom: 0;
+    padding-top: var(--header-height);
+  }
+  header {
+    position: fixed;
+    top: 0;
+    /* Шапка должна перекрывать всю ширину экрана (включая зону над боковым меню) */
+    left: 0;
+    right: 0;
+  }
+  /* История и дневник разложены grid'ом внутри панели */
+  #historyList,
+  #diaryInput,
+  #diaryList {
+    max-width: none;
+    margin: 0;
+  }
+  /* Нижняя навигация превращается в боковую панель слева */
+  #bottomNav {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    bottom: 0;
+    width: 220px;
+    height: calc(100vh - var(--header-height));
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: var(--color-bg);
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    z-index: 100;
+  }
+  #bottomNav .nav-item {
+    color: var(--color-text);
+    text-align: left;
+    padding: 0.6rem 1.2rem;
+    width: 100%;
+    border-left: 4px solid transparent;
+    font-size: 1rem;
+  }
+  #bottomNav .nav-item.active {
+    color: var(--color-primary);
+    font-weight: 600;
+    border-left-color: var(--color-primary);
+  }
+}
+
+/* === Design Step 2: Color system & cards === */
+:root {
+  --bg-main: #f4f7fb;
+  --bg-card: #ffffff;
+  --color-primary: #4f7cff;
+  --color-accent: #ffb703;
+  --color-text-main: #1f2937;
+  --color-text-muted: #6b7280;
+  --border-soft: #e5e7eb;
+
+  /* Переменные для динамического отображения эмоций. Эти значения переопределяются в скрипте. */
+  --emotion-bg: rgba(255, 255, 255, 0.85);
+  --emotion-text: var(--color-text-main);
+  --emotion-border: rgba(0, 0, 0, 0.07);
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--color-text-main);
+}
+
+/* Card system */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+}
+
+/* Buttons */
+button {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(79,124,255,.35);
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
